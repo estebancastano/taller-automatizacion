@@ -4,25 +4,19 @@ public class User {
     private final String username;
     private final String password;
     private final String email;
-    private final String firstName;
-    private final String lastName;
+    private final boolean agreeTerms;
 
-    public User(String username, String password) {
-        this(username, password, "", "", "");
-    }
-
-    public User(String username, String password, String email, String firstName, String lastName) {
+    // Constructor principal
+    public User(String username, String password, String email, boolean agreeTerms) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.agreeTerms = agreeTerms;
     }
 
+    // Getters
     public String username() { return username; }
     public String password() { return password; }
     public String email() { return email; }
-    public String firstName() { return firstName; }
-    public String lastName() { return lastName; }
+    public boolean agreeTerms() { return agreeTerms; }
 }
-

@@ -21,8 +21,8 @@ public class UserRegistrationStepDefinitions {
     public void registerValidUser() {
         OnStage.theActorInTheSpotlight().attemptsTo(
                 Register.withData(
-                        "nuevoUser7",
-                        "email7@gmail.com",
+                        "nuevoUser8",
+                        "email8@gmail.com",
                         "Password1*",
                         true
                 )
@@ -40,8 +40,8 @@ public class UserRegistrationStepDefinitions {
     public void registerExistingUser() {
         OnStage.theActorInTheSpotlight().attemptsTo(
                 Register.withData(
-                        "usuarioExistente",
-                        "other@gmail.com",
+                        "nuevoUser8",
+                        "email8@gmail.com",
                         "Password1*",
                         true
                 )

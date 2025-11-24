@@ -6,12 +6,20 @@ public class User {
     private final String email;
     private final boolean agreeTerms;
 
-    // Constructor principal
+    // Constructor para registro completo
     public User(String username, String password, String email, boolean agreeTerms) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.agreeTerms = agreeTerms;
+    }
+
+    // Constructor para login (solo username y password)
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.email = "";         // valor por defecto
+        this.agreeTerms = false; // valor por defecto
     }
 
     // Getters

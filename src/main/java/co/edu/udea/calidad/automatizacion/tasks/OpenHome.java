@@ -6,10 +6,25 @@ import net.serenitybdd.screenplay.Actor;
 
 public class OpenHome implements Task {
 
-    public static OpenHome now() { return new OpenHome(); }
+    private final String url;
+
+    // Constructor privado
+    private OpenHome(String url) {
+        this.url = url;
+    }
+
+    /** Abrir la URL específica */
+    public static OpenHome url(String url) {
+        return new OpenHome(url);
+    }
+
+    /** Abrir la página por defecto */
+    public static OpenHome now() {
+        return new OpenHome("https://www.advantageonlineshopping.com");
+    }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
-        actor.attemptsTo(Open.url("/"));
+        actor.attemptsTo(Open.url(url));
     }
 }

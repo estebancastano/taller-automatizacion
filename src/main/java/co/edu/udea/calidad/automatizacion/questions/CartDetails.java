@@ -1,56 +1,38 @@
 package co.edu.udea.calidad.automatizacion.questions;
 
-import net.serenitybdd.screenplay.Question;
-import net.serenitybdd.screenplay.Actor;
-import net.serenitybdd.screenplay.questions.Text;
-
 import co.edu.udea.calidad.automatizacion.userinterfaces.CartPage;
+import net.serenitybdd.core.pages.ListOfWebElementFacades;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-public class CartDetails implements Question<String> {
+import java.util.List;
+
+public class CartDetails implements Question<Integer> {
+
+    private final String productName;
+
+    public CartDetails(String productName) {
+        this.productName = productName;
+    }
+
+    public static CartDetails ofProduct(String productName) {
+        return new CartDetails(productName);
+    }
 
     @Override
-    public String answeredBy(Actor actor) {
-        try {
-            return Text.of(CartPage.TOTAL)
-                    .answeredBy(actor)
-                    .trim();
-        } catch (Exception e) {
-            return "";
-        }
-    }
+    public Integer answeredBy(Actor actor) {
+        // Obtener todos los productos en el carrito
+        ListOfWebElementFacades items = CartPage.CART_ITEMS.resolveAllFor(actor);
 
-    public static CartDetails of() {
-        return new CartDetails();
-    }
-
-    // ---------------------------------------------------------------------
-    // NUEVO → pregunta para validar cantidades correctas en el carrito
-    // ---------------------------------------------------------------------
-    public static Question<Boolean> quantitiesAreCorrect() {
-        return actor -> {
-
-            try {
-                // Obtener cantidades del UI
-                String q1 = Text.of(CartPage.PRODUCT_1_QTY)
-                        .answeredBy(actor)
-                        .trim();
-
-                String q2 = Text.of(CartPage.PRODUCT_2_QTY)
-                        .answeredBy(actor)
-                        .trim();
-
-                int qty1 = Integer.parseInt(q1);
-                int qty2 = Integer.parseInt(q2);
-
-                // Cantidades esperadas según AddMultipleProducts
-                boolean ok1 = qty1 == 2;
-                boolean ok2 = qty2 == 5;
-
-                return ok1 && ok2;
-
-            } catch (Exception e) {
-                return false;
+        for (WebElement item : items) {
+            String name = item.findElement(By.cssSelector(".productName")).getText();
+            if (name.equalsIgnoreCase(productName)) {
+                String qtyText = item.findElement(By.cssSelector(".quantity")).getAttribute("value");
+                return Integer.parseInt(qtyText);
             }
-        };
+        }
+        return 0; // Si no encuentra el producto
     }
 }

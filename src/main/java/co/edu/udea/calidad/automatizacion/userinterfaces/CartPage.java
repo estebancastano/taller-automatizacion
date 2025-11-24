@@ -9,8 +9,4 @@ public class CartPage {
     public static final Target ITEM_QUANTITY = Target.the("item quantity").located(By.cssSelector(".quantity"));
     public static final Target CHECKOUT_BUTTON = Target.the("checkout button").located(By.id("checkOutButton"));
     public static final Target TOTAL = Target.the("cart total").located(By.cssSelector(".totalPrice"));
-    public static final Target PRODUCT_1_QTY = Target.the("Qty product 1").located(By.id("qty1"));
-    public static final Target PRODUCT_2_QTY = Target.the("Qty product 2").located(By.id("qty2"));
-
 }
-

@@ -1,96 +1,86 @@
 package co.edu.udea.calidad.automatizacion.tasks;
 
+import co.edu.udea.calidad.automatizacion.interactions.ClickElement;
+import co.edu.udea.calidad.automatizacion.interactions.EnterText;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
-import net.serenitybdd.screenplay.Tasks;
+import net.serenitybdd.core.steps.Instrumented;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.openqa.selenium.By;
 
-import co.edu.udea.calidad.automatizacion.userinterfaces.ProductPage;
-import co.edu.udea.calidad.automatizacion.userinterfaces.LoginPage;
-import co.edu.udea.calidad.automatizacion.interactions.EnterText;
-import co.edu.udea.calidad.automatizacion.interactions.ClickElement;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
 
 public class AddToCart implements Task {
 
-    private final int quantity;
+    private final String productId;
 
-    public AddToCart(int quantity) {
-        this.quantity = quantity;
+    public AddToCart(String productId) {
+        this.productId = productId;
     }
 
-    public static AddToCart quantity(int q) {
-        return Tasks.instrumented(AddToCart.class, q);
+    /** Selecciona un producto */
+    public static AddToCart selectProduct(String productId) {
+        return Instrumented.instanceOf(AddToCart.class).withProperties(productId);
+    }
+
+    /** Agrega un producto con cantidad */
+    public static Task withProductAndQuantity(String productId, int quantity) {
+        return Instrumented.instanceOf(AddToCartWithQuantity.class)
+                .withProperties(productId, quantity);
     }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
+
+        // Categoría Tablets
+        Target TABLETS_IMG = Target.the("tablets category")
+                .located(By.id("tabletsImg"));
+
+        // Botón SHOP NOW del producto usando XPath
+        Target PRODUCT_BUTTON = Target.the("Shop Now button for product " + productId)
+                .located(By.xpath("//li[.//img[@id='" + productId + "']]//div[contains(@class,'AddToCard')]"));
+
         actor.attemptsTo(
-                EnterText.into(ProductPage.QUANTITY, String.valueOf(quantity)),
-                ClickElement.element(ProductPage.ADD_TO_CART)
+                WaitUntil.the(TABLETS_IMG, isClickable()).forNoMoreThan(10).seconds(),
+                ClickElement.element(TABLETS_IMG),
+
+                WaitUntil.the(PRODUCT_BUTTON, isClickable()).forNoMoreThan(10).seconds(),
+                Scroll.to(PRODUCT_BUTTON),
+                ClickElement.element(PRODUCT_BUTTON)
         );
     }
 
-    // ---------------------------------------------------------
-    // 1) LOGIN BEFORE SHOPPING (sin Task.where)
-    // ---------------------------------------------------------
-    public static Task loginBeforeShopping() {
-        return Tasks.instrumented(LoginBeforeShopping.class);
-    }
+    /** Clase interna para agregar cantidad y guardar en carrito */
+    public static class AddToCartWithQuantity implements Task {
 
-    public static class LoginBeforeShopping implements Task {
-        @Override
-        public <T extends Actor> void performAs(T actor) {
-            actor.attemptsTo(
-                    EnterText.into(LoginPage.USERNAME, "clienteDemo"),
-                    EnterText.into(LoginPage.PASSWORD, "123456"),
-                    ClickElement.element(LoginPage.LOGIN_BUTTON)
-            );
+        private final String productId;
+        private final int quantity;
+
+        public AddToCartWithQuantity(String productId, int quantity) {
+            this.productId = productId;
+            this.quantity = quantity;
         }
-    }
 
-    // ---------------------------------------------------------
-    // 2) SELECT PRODUCTS
-    // ---------------------------------------------------------
-    public static Task selectProducts() {
-        return Tasks.instrumented(SelectProducts.class);
-    }
-
-    public static class SelectProducts implements Task {
-        @Override
-        public <T extends Actor> void performAs(T actor) {
-            actor.attemptsTo(
-                    ClickElement.element(ProductPage.PRODUCT_1),
-                    ClickElement.element(ProductPage.PRODUCT_2)
-            );
-        }
-    }
-
-    // ---------------------------------------------------------
-    // 3) ADD MULTIPLE PRODUCTS WITH DIFFERENT QUANTITIES
-    // ---------------------------------------------------------
-    public static Task addMultipleProducts() {
-        return Tasks.instrumented(AddMultipleProducts.class);
-    }
-
-    public static class AddMultipleProducts implements Task {
         @Override
         public <T extends Actor> void performAs(T actor) {
 
-            // PRODUCTO 1
-            actor.attemptsTo(
-                    ClickElement.element(ProductPage.PRODUCT_1),
-                    EnterText.into(ProductPage.QUANTITY, "2"),
-                    ClickElement.element(ProductPage.ADD_TO_CART)
-            );
+            Target QUANTITY_INPUT = Target.the("quantity input")
+                    .located(By.name("quantity"));
+            Target SAVE_BUTTON = Target.the("save to cart button")
+                    .located(By.name("save_to_cart"));
 
-            actor.attemptsTo(
-                    ClickElement.element(ProductPage.BACK_TO_PRODUCTS)
-            );
+            // Selecciona el producto primero
+            actor.attemptsTo(AddToCart.selectProduct(productId));
 
-            // PRODUCTO 2
+            // Cambiar cantidad y guardar
             actor.attemptsTo(
-                    ClickElement.element(ProductPage.PRODUCT_2),
-                    EnterText.into(ProductPage.QUANTITY, "5"),
-                    ClickElement.element(ProductPage.ADD_TO_CART)
+                    WaitUntil.the(QUANTITY_INPUT, isClickable()).forNoMoreThan(5).seconds(),
+                    EnterText.into(QUANTITY_INPUT, String.valueOf(quantity)),
+
+                    WaitUntil.the(SAVE_BUTTON, isClickable()).forNoMoreThan(5).seconds(),
+                    ClickElement.element(SAVE_BUTTON)
             );
         }
     }

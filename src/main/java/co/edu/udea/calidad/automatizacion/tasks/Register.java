@@ -29,12 +29,12 @@ public class Register implements Task {
     }
 
     /** Construye un usuario y ejecuta el registro */
-    public static Task withData(String username, String email, String password) {
+    public static Task withData(String username, String password, String email) {
 
         User newUser = new User(
                 username,
-                email,
                 password,
+                email,
                 "NombreDefault",
                 "ApellidoDefault"
         );
@@ -55,8 +55,8 @@ public class Register implements Task {
 
                 // 3. Llenar datos
                 EnterText.into(RegistrationPage.USERNAME, user.username()),
-                EnterText.into(RegistrationPage.EMAIL, user.email()),
                 EnterText.into(RegistrationPage.PASSWORD, user.password()),
+                EnterText.into(RegistrationPage.EMAIL, user.email()),
                 EnterText.into(RegistrationPage.REPEAT_PASSWORD, user.password()),
 
                 // Campos opcionales

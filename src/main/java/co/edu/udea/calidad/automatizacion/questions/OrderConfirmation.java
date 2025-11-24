@@ -9,8 +9,7 @@ public class OrderConfirmation {
     /** Retorna el mensaje de orden completada */
     public static Question<String> text() {
         return actor -> Text.of(CheckoutPage.ORDER_MESSAGE)
-                .viewedBy(actor)
-                .asString()
+                .answeredBy(actor)
                 .trim();
     }
 
@@ -20,16 +19,14 @@ public class OrderConfirmation {
             try {
                 double totalCart = Double.parseDouble(
                         Text.of(CheckoutPage.TOTAL_PRICE_CART)
-                                .viewedBy(actor)
-                                .asString()
+                                .answeredBy(actor)
                                 .replace("$", "")
                                 .trim()
                 );
 
                 double totalPaid = Double.parseDouble(
                         Text.of(CheckoutPage.TOTAL_PRICE_SUMMARY)
-                                .viewedBy(actor)
-                                .asString()
+                                .answeredBy(actor)
                                 .replace("$", "")
                                 .trim()
                 );

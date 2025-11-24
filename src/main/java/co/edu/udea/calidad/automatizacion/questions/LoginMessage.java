@@ -11,8 +11,7 @@ public class LoginMessage implements Question<String> {
     public String answeredBy(Actor actor) {
         try {
             return Text.of(HomePage.HOME_TITLE)
-                    .viewedBy(actor)
-                    .asString()
+                    .answeredBy(actor)
                     .trim();
         } catch (Exception e) {
             return "";
@@ -21,5 +20,35 @@ public class LoginMessage implements Question<String> {
 
     public static LoginMessage value() {
         return new LoginMessage();
+    }
+
+    // =====================================================
+    // ✔ MÉTODO PARA MENSAJE DE LOGIN EXITOSO
+    // =====================================================
+    public static Question<String> success() {
+        return actor -> {
+            try {
+                return Text.of(HomePage.HOME_TITLE)
+                        .answeredBy(actor)
+                        .trim();
+            } catch (Exception e) {
+                return "";
+            }
+        };
+    }
+
+    // =====================================================
+    // ✔ MÉTODO PARA MENSAJE DE LOGIN FALLIDO
+    // =====================================================
+    public static Question<String> error() {
+        return actor -> {
+            try {
+                return Text.of(HomePage.ERROR_MESSAGE)
+                        .answeredBy(actor)
+                        .trim();
+            } catch (Exception e) {
+                return "";
+            }
+        };
     }
 }

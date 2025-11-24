@@ -2,8 +2,8 @@ package co.edu.udea.calidad.automatizacion.stepdefinitions;
 
 import io.cucumber.java.en.*;
 import net.serenitybdd.screenplay.actors.OnStage;
-import tasks.Checkout;
-import questions.OrderConfirmation;
+import co.edu.udea.calidad.automatizacion.tasks.Checkout;
+import co.edu.udea.calidad.automatizacion.questions.OrderConfirmation;
 
 import static net.serenitybdd.screenplay.GivenWhenThen.*;
 

@@ -1,7 +1,7 @@
 package co.edu.udea.calidad.automatizacion.questions;
 
-import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.questions.Text;
 import co.edu.udea.calidad.automatizacion.userinterfaces.CartPage;
 
@@ -11,8 +11,7 @@ public class CartTotal implements Question<Double> {
     public Double answeredBy(Actor actor) {
         try {
             String raw = Text.of(CartPage.TOTAL)
-                    .viewedBy(actor)
-                    .asString()
+                    .answeredBy(actor)
                     .replace("$", "")
                     .trim();
 

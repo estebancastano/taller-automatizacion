@@ -11,8 +11,7 @@ public class ProductPrice implements Question<Double> {
     public Double answeredBy(Actor actor) {
         try {
             String raw = Text.of(ProductPage.PRICE)
-                    .viewedBy(actor)
-                    .asString()
+                    .answeredBy(actor)
                     .replace("$", "")
                     .trim();
 

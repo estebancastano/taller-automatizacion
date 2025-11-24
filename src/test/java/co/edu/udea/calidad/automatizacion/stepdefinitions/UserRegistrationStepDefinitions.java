@@ -20,7 +20,7 @@ public class UserRegistrationStepDefinitions {
     @When("he registers with valid personal information")
     public void registerValidUser() {
         OnStage.theActorInTheSpotlight().attemptsTo(
-                Register.withData("nuevoUser", "email@gmail.com", "Password123")
+                Register.withData("nuevoUser", "Password123","email@gmail.com" )
         );
     }
 
